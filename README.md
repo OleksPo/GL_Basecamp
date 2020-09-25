@@ -12,6 +12,6 @@ The push refers to repository [docker.io/liveuser031/task_answers]
 bf509d6bc5ec: Preparing 
 88cc1a200eb9: Preparing 
 denied: requested access to the resource is denied
-
->to make all in the last minute is the worth practice ;(
 ```
+>to make all in the last minute is the worth practice ;(
+
