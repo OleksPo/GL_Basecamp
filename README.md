@@ -1,2 +1,4 @@
-# task_answer
-task answers for GL Kharkiv BaseCamp
+# task_answers
+answers for selection quiz to GlobalLogic Kharkiv BaseCamp
+
+docker container built of it dockerfile works on port 4321.
