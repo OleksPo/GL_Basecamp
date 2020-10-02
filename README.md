@@ -4,9 +4,9 @@ One-line web server was packed to docker image.
 Docker container works on port 4321.
 
 Please run the command `docker pull olekspo/task_answer:latest`
-then `docker run -d olekspo/task_answer:latest`
+then `docker run -d --net=host olekspo/task_answer:latest`
 
-In your browser on port 4321 you might see some like this:
+In your browser by `http://localhost:4321` you might see some like this:
 
 ```
 ************PRINT SOME TEXT***************
