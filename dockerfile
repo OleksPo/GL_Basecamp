@@ -5,4 +5,3 @@ COPY ["page", "task_answer.sh"] .
 EXPOSE 4321:4321
 
 ENTRYPOINT [ "./task_answer.sh" ]
-
