@@ -1,4 +1,4 @@
-# task_answers
+# task_answer
 answer for #50 of selection quiz to GlobalLogic Kharkiv BaseCamp
 One-line web server was packed to docker image.
 Docker container works on port 4321.
