@@ -1,24 +1,15 @@
 [group1]
-host1
+host1 ansible_host=18.157.179.202 ansible_user=ec2-user ansible_ssh_privat_key_file=$HOME/.ssh/aws-ubunter.pem
 
 [group2]
-host2
+host2 ansible_host=3.127.85.120 ansible_user=ec2-user ansible_ssh_privat_key_file=$HOME/.ssh/aws-ubunter.pem
 
 [group3]
-host3
+host3 ansible_host=18.197.228.171 ansible_user=ec2-user ansible_ssh_privat_key_file=$HOME/.ssh/aws-ubunter.pem
 
 [group4]
-host4
+host4 ansible_host=18.197.62.24 ansible_user=ec2-user ansible_ssh_privat_key_file=$HOME/.ssh/aws-ubunter.pem
 
 [iaas:children]
 group1
 group2
-group3
-group4
-
-[iaas:vars]
-#some_server=foo.southeast.example.com
-#halon_system_timeout=30
-#self_destruct_countdown=60
-#escape_pods=2
-

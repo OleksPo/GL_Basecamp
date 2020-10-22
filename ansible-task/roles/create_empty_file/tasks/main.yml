@@ -1,0 +1,9 @@
+---
+# Touch again the same file, but dont change times - this makes the task idempotent
+- name: creating_an_empty_file
+    file:
+      path: /etc/iaac
+      state: touch
+      mode: 0500
+      modification_time: preserve
+      access_time: preserve  

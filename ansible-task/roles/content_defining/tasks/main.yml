@@ -1,0 +1,7 @@
+---
+# Touch again the same file, but dont change times - this makes the task idempotent
+- name: defining_of_content_as_variable
+  shell: cat /etc/issue
+  register: issue_result
+
+    

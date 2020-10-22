@@ -1,0 +1,17 @@
+---
+# This playbook deploys the whole application stack in this homework.
+
+- name: invoke_the_role_for_file_creating
+  hosts: iaas
+  remote_user: root
+  roles:
+    - create_empty_file
+
+- name: invoke_the_role_for_content_defining
+  hosts: all
+  roles:
+    - content_defining
+  tasks:
+    - name: 
+      debug:
+        msg: "Hostname {{ inventory_hostname }} have the content {{ issue_result }}"
