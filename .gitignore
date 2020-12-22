@@ -1,1 +1,10 @@
-k8s-course/*
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+README.md
+gl-basecamp-bash/*
+Python/*
