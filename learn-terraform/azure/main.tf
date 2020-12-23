@@ -224,7 +224,7 @@ resource "azurerm_linux_virtual_machine" "vm2" {
   network_interface_ids = [
     azurerm_network_interface.nic1.id,
   ]
-  zone                 = "1"
+  zone                 = "2"
   
   admin_ssh_key {
     username   = "azureuser"
