@@ -29,11 +29,13 @@ resource "azurerm_virtual_network" "vnet" {
 variable "admin_username" {
     type = string
     description = "Administrator user name for virtual machine"
+    default     = "azureuser"
 }
 
 variable "admin_password" {
     type = string
     description = "Password must meet Azure complexity requirements"
+    default     = "P@ssw0rd1234!"
 }
 
 # Create subnets
@@ -108,7 +110,7 @@ resource "azurerm_lb" "lb" {
 
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
-    public_ip_address_id = azurerm_public_ip.lb.id
+    public_ip_address_id = azurerm_public_ip.publicip.id
   }
 }
 
@@ -148,7 +150,7 @@ resource "azurerm_network_interface" "nic1" {
 
   ip_configuration {
     name                          = "myNic1Config"
-    subnet_id                     = azurerm_subnet.subnet.id
+    subnet_id                     = azurerm_subnet.subnet1.id
     private_ip_address_allocation = "dynamic"
     public_ip_address_id          = azurerm_public_ip.publicip.id
   }
@@ -184,8 +186,8 @@ resource "azurerm_virtual_machine" "vm1" {
 
   os_profile {
     computer_name  = "myTFVM-1"
-    admin_username = "azureuser"
-    admin_password = "P@ssw0rd1234!"
+    admin_username = var.admin_username
+    admin_password = var.admin_password
   }
 
   os_profile_linux_config {
@@ -201,7 +203,7 @@ resource "azurerm_network_interface" "nic2" {
 
   ip_configuration {
     name                          = "myNic2Config"
-    subnet_id                     = azurerm_subnet.subnet1.id
+    subnet_id                     = azurerm_subnet.subnet2.id
     private_ip_address_allocation = "dynamic"
     public_ip_address_id          = azurerm_public_ip.publicip.id
   }
@@ -214,15 +216,15 @@ resource "azurerm_network_interface_backend_address_pool_association" "nic2be-as
 }
 
 resource "azurerm_linux_virtual_machine" "vm2" {
-  name                = "example-machine"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                = "Standard_B1S"
-  admin_username      = "azureuser"
+  name                  = "example-machine"
+  resource_group_name   = azurerm_resource_group.rg.name
+  location              = azurerm_resource_group.rg.location
+  size                  = "Standard_B1S"
+  admin_username        = var.admin_username
   network_interface_ids = [
     azurerm_network_interface.nic1.id,
   ]
-  zone                = [ 1 ]
+  zone                 = "1"
   
   admin_ssh_key {
     username   = "azureuser"
@@ -245,5 +247,5 @@ resource "azurerm_linux_virtual_machine" "vm2" {
 
 
 output "azurerm_public_ip" {
-  value = azurerm_public_ip.lb.id
+  value = azurerm_public_ip.publicip.id
 }
