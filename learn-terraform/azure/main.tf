@@ -14,13 +14,13 @@ provider "azurerm" {
 
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
-  name = "myTFResourceGroup"
+  name = "myHWResourceGroup"
   location = "westus2"
 }
 
 # Create a ___VIRTUAL NETWORK___
 resource "azurerm_virtual_network" "vnet" {
-  name = "myTFVnet"
+  name = "myHWVnet"
   address_space = ["10.10.10.0/24"]
   location = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -57,29 +57,31 @@ resource "azurerm_public_ip" "publicip" {
   name                = "myPublicIPforLB"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
+  sku                 = "Standard"
   allocation_method   = "Static"
 }
+/*
 # Create public IPs-for-VirtualMachines
-#resource "azurerm_public_ip" "vm1" {
-#  name                = "PublicIPforVM1"
-#  location            = azurerm_resource_group.rg.location
-#  resource_group_name = azurerm_resource_group.rg.name
-#  allocation_method   = "Static"
-#  sku                 = "Standard"
-#  zones = ["1"]
-#}
-#resource "azurerm_public_ip" "vm2" {
-#  name                = "PublicIPforVM2"
-#  location            = azurerm_resource_group.rg.location
-#  resource_group_name = azurerm_resource_group.rg.name
-#  allocation_method   = "Static"
-#  sku                 = "Standard"
-#  zones = ["2"]
-#}
-
-# Create ___NETWORK SECURITY GROUP___ and rule
+resource "azurerm_public_ip" "vm1" {
+  name                = "PublicIPforVM1"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  zones = ["1"]
+}
+resource "azurerm_public_ip" "vm2" {
+  name                = "PublicIPforVM2"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  zones = ["2"]
+}
+*/
+# Create ___NETWORK SECURITY GROUP___ and rules
 resource "azurerm_network_security_group" "nsg" {
-  name                = "myTFNSG"
+  name                = "myHWNSG"
   location            = "westus2"
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -126,7 +128,7 @@ resource "azurerm_lb" "lb" {
   resource_group_name = azurerm_resource_group.rg.name
   sku = "Standard"
   frontend_ip_configuration {
-    name                 = "PublicIPAddress"
+    name                 = "myPublicIPForLB"
     public_ip_address_id = azurerm_public_ip.publicip.id
   }
 }
@@ -136,19 +138,19 @@ resource "azurerm_lb_backend_address_pool" "backend" {
   loadbalancer_id     = azurerm_lb.lb.id
   name                = "BackEndAddressPool"
 }
-
+/*
 resource "azurerm_lb_outbound_rule" "outboundrule" {
-  resource_group_name     = azurerm_resource_group.rg.name
+ resource_group_name     = azurerm_resource_group.rg.name
   loadbalancer_id         = azurerm_lb.lb.id
   name                    = "OutboundRule"
   protocol                = "Tcp"
   backend_address_pool_id = azurerm_lb_backend_address_pool.backend.id
 
   frontend_ip_configuration {
-    name = "PublicIPAddress"
+    name = "myPublicIPForLB"
   }
 }
-
+*/
 resource "azurerm_lb_rule" "frontendrule" {
   resource_group_name            = azurerm_resource_group.rg.name
   loadbalancer_id                = azurerm_lb.lb.id
@@ -156,7 +158,7 @@ resource "azurerm_lb_rule" "frontendrule" {
   protocol                       = "Tcp"
   frontend_port                  = 80
   backend_port                   = 80
-  frontend_ip_configuration_name = "PublicIPAddress"
+  frontend_ip_configuration_name = "myPublicIPForLB"
 }
 # VIRUAL MACHINE ___#1___
 # Create network interface
@@ -180,7 +182,7 @@ resource "azurerm_network_interface_backend_address_pool_association" "nic1be-as
 
 # Create a virtual machine
 resource "azurerm_virtual_machine" "vm1" {
-  name                  = "myTFVM-1"
+  name                  = "myHWVM-1"
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.nic1.id]
@@ -221,7 +223,7 @@ resource "azurerm_network_interface" "nic2" {
   ip_configuration {
     name                          = "myNic2Config"
     subnet_id                     = azurerm_subnet.subnet2.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
   #  public_ip_address_id          = azurerm_public_ip.vm2.id
   }
 }
@@ -233,13 +235,13 @@ resource "azurerm_network_interface_backend_address_pool_association" "nic2be-as
 }
 
 resource "azurerm_linux_virtual_machine" "vm2" {
-  name                  = "myTFVM-2"
+  name                  = "myHWVM-2"
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
   size                  = "Standard_B1S"
   admin_username        = var.admin_username
   network_interface_ids = [
-    azurerm_network_interface.nic1.id,
+    azurerm_network_interface.nic2.id,
   ]
   zone                 = "2"
   
