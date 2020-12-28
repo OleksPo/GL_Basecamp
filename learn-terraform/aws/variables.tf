@@ -1,16 +1,13 @@
 variable "key_name" {
   description = "Desired name of AWS key pair"
-  default = "docker-ubunter.pem"
 }
 
 variable "public_key_puth" {
   description = "Desired puth to file of AWS key pair"
-  default = "~/.ssh/docker-ubunter.pem"
 }
 
 variable "aws_region" {
   description = "AWS region to launch servers."
-  default     = "eu-central-1"
 }
 
 # Ubuntu Precise 16.04 LTS (x64)
